@@ -33,6 +33,7 @@ import {
 import type { GroupMetadata, WAMessageKey, WAMessage, WASocket } from '@whiskeysockets/baileys';
 
 import { ASSISTANT_HAS_OWN_NUMBER, ASSISTANT_NAME, DATA_DIR } from '../config.js';
+import { resizeImage } from '../image.js';
 import { readEnvFile } from '../env.js';
 import { log } from '../log.js';
 import { registerChannelAdapter } from './channel-registry.js';
@@ -324,9 +325,10 @@ registerChannelAdapter('whatsapp', {
       for (const { key, type, ext } of mediaTypes) {
         if (!normalized[key]) continue;
         try {
-          const buffer = await downloadMediaMessage(msg, 'buffer', {});
+          let buffer = await downloadMediaMessage(msg, 'buffer', {}) as Buffer;
+          if (type === 'image') buffer = await resizeImage(buffer);
           const docFilename = normalized[key].fileName;
-          const filename = docFilename || `${type}-${Date.now()}${ext}`;
+          const filename = type === 'image' ? `img-${Date.now()}.jpg` : (docFilename || `${type}-${Date.now()}${ext}`);
           const attachDir = path.join(DATA_DIR, 'attachments');
           fs.mkdirSync(attachDir, { recursive: true });
           const filePath = path.join(attachDir, filename);
