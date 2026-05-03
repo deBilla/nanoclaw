@@ -1,0 +1,33 @@
+# Voice support sidecars for NanoClaw.
+#
+# Start:  docker compose -f docker-compose.voice.yml up -d
+# Stop:   docker compose -f docker-compose.voice.yml down
+#
+# STT: Whisper on port 9000
+# TTS: Kokoro on port 9001 — set TTS_URL=http://localhost:9001/v1/audio/speech in .env
+#      Optional TTS_VOICE (default: af_heart). Other good voices:
+#        af_bella, af_nicole, am_adam, am_michael, bf_emma, bm_george
+#
+# First run downloads the Whisper model (~140MB for base). Subsequent starts
+# use the cached model from the named volume.
+
+services:
+  whisper:
+    image: onerahmet/openai-whisper-asr-webservice:latest
+    environment:
+      - ASR_MODEL=base          # tiny | base | small | medium | large
+      - ASR_ENGINE=openai_whisper
+    ports:
+      - "9000:9000"
+    volumes:
+      - whisper-cache:/root/.cache/whisper
+    restart: unless-stopped
+
+  kokoro:
+    image: ghcr.io/remsky/kokoro-fastapi-cpu:latest
+    ports:
+      - "9001:8880"
+    restart: unless-stopped
+
+volumes:
+  whisper-cache:
