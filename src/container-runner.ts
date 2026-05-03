@@ -18,6 +18,9 @@ import {
   ONECLI_API_KEY,
   ONECLI_URL,
   TIMEZONE,
+  TTS_URL,
+  TTS_VOICE,
+  TTS_MODEL,
 } from './config.js';
 import { readContainerConfig, writeContainerConfig } from './container-config.js';
 import { CONTAINER_RUNTIME_BIN, hostGatewayArgs, readonlyMountArgs, stopContainer } from './container-runtime.js';
@@ -426,6 +429,11 @@ async function buildContainerArgs(
   // Environment — only vars read by code we don't own.
   // Everything NanoClaw-specific is in container.json (read by runner at startup).
   args.push('-e', `TZ=${TIMEZONE}`);
+
+  // Voice TTS — forward so the speak MCP tool can reach the local Kokoro sidecar.
+  if (TTS_URL) args.push('-e', `TTS_URL=${TTS_URL}`);
+  if (TTS_VOICE) args.push('-e', `TTS_VOICE=${TTS_VOICE}`);
+  if (TTS_MODEL) args.push('-e', `TTS_MODEL=${TTS_MODEL}`);
 
   // Provider-contributed env vars (e.g. XDG_DATA_HOME, OPENCODE_*, NO_PROXY).
   if (providerContribution.env) {
