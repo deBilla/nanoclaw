@@ -325,10 +325,10 @@ registerChannelAdapter('whatsapp', {
       for (const { key, type, ext } of mediaTypes) {
         if (!normalized[key]) continue;
         try {
-          let buffer = await downloadMediaMessage(msg, 'buffer', {}) as Buffer;
+          let buffer = (await downloadMediaMessage(msg, 'buffer', {})) as Buffer;
           if (type === 'image') buffer = await resizeImage(buffer);
           const docFilename = normalized[key].fileName;
-          const filename = type === 'image' ? `img-${Date.now()}.jpg` : (docFilename || `${type}-${Date.now()}${ext}`);
+          const filename = type === 'image' ? `img-${Date.now()}.jpg` : docFilename || `${type}-${Date.now()}${ext}`;
           const attachDir = path.join(DATA_DIR, 'attachments');
           fs.mkdirSync(attachDir, { recursive: true });
           const filePath = path.join(attachDir, filename);
