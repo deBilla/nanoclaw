@@ -1,0 +1,90 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[top=0.75in,bottom=0.75in,left=0.75in,right=0.75in]{geometry}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{parskip}
+
+\definecolor{accent}{HTML}{1D4ED8}
+
+\titleformat{\section}
+  {\large\bfseries\color{accent}}{}{0em}{}
+  [\vspace{-0.6ex}{\color{accent}\titlerule[0.6pt]}\vspace{0.4ex}]
+\titlespacing*{\section}{0pt}{1.4ex}{0.3ex}
+
+\setlist[itemize]{leftmargin=*,topsep=2pt,itemsep=1pt,parsep=0pt}
+
+\pagestyle{empty}
+\parskip=4pt
+
+\begin{document}
+
+%% ── Header ──────────────────────────────────────────────────────────────────
+{\LARGE\bfseries << personal.name >>}
+
+\vspace{3pt}
+\small
+\href{mailto:<< personal.email >>}{<< personal.email >>}%
+<% if personal.phone %>\enspace\textbar\enspace << personal.phone >><% endif %>%
+<% if personal.location %>\enspace\textbar\enspace << personal.location >><% endif %>%
+<% if personal.linkedin %>\enspace\textbar\enspace \href{<< personal.linkedin >>}{LinkedIn}<% endif %>%
+<% if personal.github %>\enspace\textbar\enspace \href{<< personal.github >>}{GitHub}<% endif %>%
+<% if personal.website %>\enspace\textbar\enspace \href{<< personal.website >>}{<< personal.website >>}<% endif %>
+\normalsize
+
+<% if summary %>
+\section{Summary}
+<< summary >>
+<% endif %>
+
+<% if experience %>
+\section{Experience}
+<% for job in experience %>
+\noindent\textbf{<< job.role >>}\hfill\textit{<< job.start >>} -- \textit{<< job.end or "Present" >>}\\[-2pt]
+\textit{<< job.company >>}<% if job.location %>\hfill<< job.location >><% endif %>
+
+<% if job.bullets %>
+\begin{itemize}
+<% for b in job.bullets %>  \item << b >>
+<% endfor %>\end{itemize}
+<% endif %>
+<% if not loop.last %>\vspace{2pt}
+<% endif %>
+<% endfor %>
+<% endif %>
+
+<% if education %>
+\section{Education}
+<% for edu in education %>
+\noindent\textbf{<< edu.institution >>}%
+<% if edu.start or edu.end %>\hfill\textit{<% if edu.start %><< edu.start >><% endif %><% if edu.end %> -- << edu.end >><% endif %>}<% endif %>\\[-2pt]
+\textit{<< edu.degree >><% if edu.field %>, << edu.field >><% endif %>}%
+<% if edu.gpa %>\quad GPA:~<< edu.gpa >><% endif %>
+
+<% endfor %>
+<% endif %>
+
+<% if skills %>
+\section{Skills}
+\begin{itemize}[label={},leftmargin=0pt,topsep=0pt,itemsep=2pt]
+<% for category, items in skills.items() %>
+  \item \textbf{<< category >>:}\enspace << items | join(", ") >>
+<% endfor %>
+\end{itemize}
+<% endif %>
+
+<% if projects %>
+\section{Projects}
+<% for proj in projects %>
+\noindent\textbf{<< proj.name >>}%
+<% if proj.url %>\enspace\href{<< proj.url >>}{\small[link]}<% endif %>%
+<% if proj.tech %>\hfill\textit{\small << proj.tech | join(", ") >>}<% endif %>\\[-2pt]
+<< proj.description >>
+
+<% endfor %>
+<% endif %>
+
+\end{document}

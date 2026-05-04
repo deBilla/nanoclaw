@@ -15,6 +15,7 @@ const envConfig = readEnvFile([
   'TTS_URL',
   'TTS_VOICE',
   'TTS_MODEL',
+  'LATEX_URL',
 ]);
 
 export const ASSISTANT_NAME = process.env.ASSISTANT_NAME || envConfig.ASSISTANT_NAME || 'Andy';
@@ -50,6 +51,7 @@ export const MAX_CONCURRENT_CONTAINERS = Math.max(1, parseInt(process.env.MAX_CO
 export const TTS_URL = process.env.TTS_URL || envConfig.TTS_URL;
 export const TTS_VOICE = process.env.TTS_VOICE || envConfig.TTS_VOICE;
 export const TTS_MODEL = process.env.TTS_MODEL || envConfig.TTS_MODEL;
+export const LATEX_URL = process.env.LATEX_URL || envConfig.LATEX_URL;
 
 function escapeRegex(str: string): string {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

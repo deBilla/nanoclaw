@@ -21,6 +21,7 @@ import {
   TTS_URL,
   TTS_VOICE,
   TTS_MODEL,
+  LATEX_URL,
 } from './config.js';
 import { readContainerConfig, writeContainerConfig } from './container-config.js';
 import { CONTAINER_RUNTIME_BIN, hostGatewayArgs, readonlyMountArgs, stopContainer } from './container-runtime.js';
@@ -452,6 +453,7 @@ async function buildContainerArgs(
   if (TTS_URL) args.push('-e', `TTS_URL=${TTS_URL}`);
   if (TTS_VOICE) args.push('-e', `TTS_VOICE=${TTS_VOICE}`);
   if (TTS_MODEL) args.push('-e', `TTS_MODEL=${TTS_MODEL}`);
+  if (LATEX_URL) args.push('-e', `LATEX_URL=${LATEX_URL}`);
 
   // Provider-contributed env vars (e.g. XDG_DATA_HOME, OPENCODE_*, NO_PROXY).
   if (providerContribution.env) {

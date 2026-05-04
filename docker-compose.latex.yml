@@ -1,0 +1,20 @@
+# LaTeX PDF compiler sidecar for NanoClaw.
+#
+# Start:  docker compose -f docker-compose.latex.yml up -d
+# Stop:   docker compose -f docker-compose.latex.yml down
+#
+# Exposes a FastAPI service on port 9003 with endpoints:
+#   POST /compile        — raw LaTeX source → PDF binary
+#   GET  /templates      — list bundled CV templates
+#   POST /render-cv      — structured CV data → PDF binary
+#
+# Set LATEX_URL=http://localhost:9003 in .env to enable the latex MCP tools.
+# Default engine is xelatex; pass "engine": "pdflatex" per-request to override.
+
+services:
+  latex:
+    build:
+      context: ./container/latex-service
+    ports:
+      - "9003:9003"
+    restart: unless-stopped
